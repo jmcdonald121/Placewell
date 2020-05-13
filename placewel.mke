@@ -1,0 +1,70 @@
+#----------------------------------------------------------------------
+#
+#   pntdata.mke -- make file for pntdata.mc
+#
+#----------------------------------------------------------------------
+#-------------------------------------------------
+#       Define constants specific to this example
+#-------------------------------------------------
+%ifndef mdlcorps
+    mdlcorps   = /usr2/mcdonald/mdl/
+%endif
+baseDir    = $(mdlcorps)placewel/
+objectDir  = $(mdlcorps)objects/
+privateInc = $(baseDir)
+corpsapps  = $(mdlcorps)mdlapps/
+
+Objs  = $(objectDir)placewel.mo
+
+Rscs  = $(objectDir)placedlg.rsc \
+	$(objectDir)placetyp.rsc \
+	$(objectDir)placewel.mp
+
+%ifdef BSI
+debug=1
+%include $(MS)/include/publish/mdl.mki
+%else
+debug=1
+%include /usr/ip32/mstation/mdl/include/mdl.mki
+%endif
+
+#---------------------------------------------
+#       Compile Dialog Resources
+#---------------------------------------------
+$(objectDir)placedlg.rsc        : $(baseDir)placedlg.r
+
+#---------------------------------------------
+#       Make resource to publish structure(s)
+#---------------------------------------------
+$(objectDir)placetyp.r          : $(baseDir)placetyp.mt $(privateInc)placedlg.h
+
+$(objectDir)placetyp.rsc        : $(objectDir)placetyp.r
+
+#---------------------------------------------
+#       Compile and link MDL Application
+#---------------------------------------------
+$(objectDir)placewel.mo          : $(baseDir)placewel.mc
+
+$(objectDir)placewel.mp          : $(objectDir)placewel.mo
+	$(msg)
+	>$(objectDir)temp1.cmd
+	-a$@
+	-s6000
+	$(linkOpts)
+	$(Objs)
+	$(mdlLibs)ditemlib.ml
+	<
+	$(linkCmd) @$(objectDir)temp1.cmd
+	~time
+
+#---------------------------------------------
+#       Merge Objects into one file
+#---------------------------------------------
+$(corpsapps)placewel.ma            : $(Rscs)
+	$(msg)  
+	>$(objectDir)temp.cmd
+	-o$@
+	$(Rscs)
+	<
+	$(rscLibCmd) @$(objectDir)temp.cmd
+	~time

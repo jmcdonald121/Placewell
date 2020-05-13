@@ -1,0 +1,29 @@
+
+                  Read ASCII Point Data - PNTDATA
+                 ====================================
+
+PNTDATA is an MDL application which will run under any version of
+MicroStation 4.x.  This application is used to convert a column formatted
+ASCII X,Y,Z data files into IGDS design files.  This application has been
+designed to place spot elevation text for river soundings.  This application
+requires a parameter file to exist prior to executing the command.  The
+parameter file which has a default extension of .prm contains information
+about the order of the data in the ASCII point file.
+
+                    To Run PNTDATA
+                  ==================
+
+1. Set a BSI environment variable PNTDATA_PRM to point to the
+default parameter file.
+
+    DOS   add following line to \ustation\data\uconfig.dat
+        PNTDATA_PRM=d:\corps\pntdata.prm    <-- put in your own .prm file name
+    UNIX
+        export PNTDATA_PRM=/usr#/corps/pntdata.prm  <--- put in login .env file
+
+2. Copy the .ma file to a directory on the path defined by MS_MDL
+   (/ustation/mdlapps by default)
+
+
+3. Start up MicroStation and keyin "mdl l pntdata".
+
